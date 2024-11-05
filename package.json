@@ -1,0 +1,20 @@
+{
+  "name": "automation-with-bdd-framework",
+  "version": "1.0.0",
+  "description": "Automation practice in cypress with BDD framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Somanath",
+  "license": "ISC",
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^21.0.2",
+    "@cypress/browserify-preprocessor": "^3.0.2",
+    "cypress": "^13.15.1",
+    "cypress-cucumber-preprocessor": "^4.3.1"
+  },
+  "cypress-cucumber-preprocessor": {
+    "step_definitions": "cypress/e2e/step_definitions/**/*.js"
+  }
+}
