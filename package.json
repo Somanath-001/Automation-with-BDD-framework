@@ -3,18 +3,31 @@
   "version": "1.0.0",
   "description": "Automation practice in cypress with BDD framework",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Somanath",
   "license": "ISC",
   "devDependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^21.0.2",
-    "@cypress/browserify-preprocessor": "^3.0.2",
-    "cypress": "^13.15.1",
-    "cypress-cucumber-preprocessor": "^4.3.1"
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.3",
+    "cypress": "^13.15.2"
   },
   "cypress-cucumber-preprocessor": {
-    "step_definitions": "cypress/e2e/step_definitions/**/*.js"
+    "step_definitions": "cypress/e2e/step_definitions/**/*.js",
+    "html": {
+      "enabled": true,
+      "output": "cypress/reports/cucumber-html/cucumber-reports.html"
+    },
+    "messages": {
+      "enabled": true,
+      "output": "cypress/reports/cucumber-ndjson/cucumber-report.ndjson"
+    },
+    "json": {
+      "enabled": true,
+      "formatter": "cucumber-json-formatter",
+      "output": "cypress/reports/cucumber-json/cucumber-report.json"
+    }
+  },
+  "scripts": {
+    "sign-in-headed": "cypress run -e Tags=\"@login\" --headed",
+    "smoke-headed": "cypress run -e Tags= \"@smoke\" --headed"
   }
 }

@@ -1,27 +1,30 @@
 const { defineConfig } = require("cypress");
-const preprocessor = require("@badeball/cypress-cucumber-preprocessor");
-const browserify = require("@badeball/cypress-cucumber-preprocessor/browserify");
-
-async function setupNodeEvents(on, config) {
-  // This is required for the preprocessor to be able to generate JSON reports after each run, and more,
-  await preprocessor.addCucumberPreprocessorPlugin(on, config);
-
-  on("file:preprocessor", browserify.default(config));
-
-  // Make sure to return the config object as it might have been modified by the plugin.
-  return config;
-}
+const createBundler = require("@bahmutov/cypress-esbuild-preprocessor");
+const {
+  addCucumberPreprocessorPlugin,
+} = require("@badeball/cypress-cucumber-preprocessor");
+const {
+  createEsbuildPlugin,
+} = require("@badeball/cypress-cucumber-preprocessor/esbuild");
 
 module.exports = defineConfig({
-  defaultCommandTimeout: 10000,
-  viewportWidth: 1200,
-  viewportHeight: 960,
-  chromeWebSecurity: true,
   e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
+    specPattern: "cypress/e2e/feature/*.feature",
+    stepDefinitions: "cypress/support/step_definitions/**/*.js",
+    async setupNodeEvents(on, config) {
+      // Add Cucumber Preprocessor Plugin
+      await addCucumberPreprocessorPlugin(on, config);
+
+      // Set up ESBuild for feature files
+      on(
+        "file:preprocessor",
+        createBundler({
+          plugins: [createEsbuildPlugin(config)],
+        })
+      );
+
+      // Ensure modified config is returned
+      return config;
     },
-    specPattern: "cypress/e2e/**/*.feature",
-    // specPattern: "cypress/e2e/testcases/**/*.js",
   },
 });
